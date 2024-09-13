@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/in-stock.png') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home-style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index-style.css') }}">
+        <title>
+            Ax Stock
+        </title>
+        <style>
+        @import url('https://fonts.cdnfonts.com/css/abnes');
+
+        header {
+            font-family: 'abnes', sans-serif;
+        }
+        </style>
+    </head>
+    <body>
+        <a href="login" class="login-link"><img src="{{ url_for('static', filename='images/login-icon.jpeg') }}" alt=""></a>
+        <header><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt=""> AX</header>
+        <div id="container"></div>
+    </body>
+</html>

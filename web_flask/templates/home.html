@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/in-stock.png') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home-style.css') }}">
+        <link href="https://fonts.cdnfonts.com/css/abnes" rel="stylesheet">
+        <style>
+        @import url('https://fonts.cdnfonts.com/css/abnes');
+        
+        header {
+            font-family: 'abnes', sans-serif;
+        }
+        </style>
+        <script src="{{ url_for('static', filename='scripts/button.js') }}"></script>
+        <title>
+            Ax Stock
+        </title>
+    </head>
+    <body>
+        <header><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt=""> AX</header>
+        <div id="sidebar">
+            <ul>
+                <li><a href="/"><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt="" id="in-stock"></a></li>
+                <li><a href="home"><img src="{{ url_for('static', filename='images/home.png') }}" alt=""></a></li>
+                <li><a href="inventory"><img src="{{ url_for('static', filename='images/table.png') }}" alt=""></a></li>
+                <li><a href="sales"><img src="{{ url_for('static', filename='images/line-chart.png') }}" alt=""></a></li>
+                <li><a href="out_going" ><img src="{{ url_for('static', filename='images/transaction.png') }}" alt=""></a></li>
+                <li><a href="pie"><img src="{{ url_for('static', filename='images/pie-chart.png') }}" alt=""></a></li>
+                <li><a href="logout"><img src="{{ url_for('static', filename='images/logout.png') }}" alt="" id="logout" ></a></li>
+                <!-- Add more links as needed -->
+            </ul>
+        </div>
+        <div>
+            <button>Menu</button>
+        </div>
+        <div id="container">
+            <div id="container-1">
+                <img src="{{ url_for('static', filename='images/login-icon.jpeg') }}" alt="">
+                <div id="text-container">
+                    <p>Username:<p1>{{ x[0] }}</p1></p>
+                    <p>Date:{{ x[1] }}</p>
+                </div>
+            </div>
+            <div id="new_shit">
+        <div id="second_shit">
+    <div class="checkbox-container">
+        <div id="checkbox1" class="checkbox black"></div>
+        <div id="checkbox2" class="checkbox red"></div>
+        <div id="checkbox3" class="checkbox green"></div>
+        <div id="checkbox4" class="checkbox blue"></div>
+        <div id="checkbox5" class="checkbox yellow"></div>
+        <div id="checkbox6" class="checkbox orange"></div>
+        <div id="checkbox7" class="checkbox orange"></div>
+    </div>
+
+    <div id="form1" class="form-container">
+        <h2>Weekly Report</h2>
+        <form method="post" action="https://ashimwe.tech/api/v1/post/download">
+            <label for="downloadButton">Download Weekly Report</label>
+            <button type="submit" id="downloadButton">Initiate-Download</button>
+            <div class="legend-container">
+                <div class="legend red"><div class="legend-box"></div>Sale</div>
+                <div class="legend green"><div class="legend-box"></div>New - Item</div>
+                <div class="legend blue"><div class="legend-box"></div>Outgoing - Item</div>
+                <div class="legend yellow"><div class="legend-box"></div>Existing - Item</div>
+                <div class="legend orange"><div class="legend-box"></div>Remark</div>
+                <div class="legend orange"><div class="legend-box"></div>Temporary update</div>
+            </div>
+        </form>
+    </div>
+
+    <div id="form2" class="form-container">
+        <h2>Sale</h2>
+                    <form method="post" action="https://ashimwe.tech/api/v1/post/sale">
+                        <div class="input">
+                            <label for="sale-item-name">Item name</label>
+                            <input list="item-name" id="sale-item-name" name="item-name" required>
+                            <datalist id="item-name">
+                                {% for item in p %}
+                                <option value="{{ item[1] }}">
+                                {% endfor %}
+                            </datalist>
+                            <label for="sale-quantity">Quantity*</label>
+                            <input type="text" id="sale-quantity" name="sale-quantity" required>
+                            <label for="sale-price">Amount*</label>
+                            <input type="text" id="sale-price" name ="sale-price"required>
+                            <label for="sale-Payment">Payment</label>
+                            <input list="Payment" id="sale-Payment" name="Payment" required>
+                            <datalist id="Payment">
+                                <option value="Cash">
+                                <option value="Mobile Money">
+                                <option value="Pos">
+                            </datalist>
+                            <input type="hidden" id="outgoing-quantity" name="username" value="{{ username }}" required>
+                            <button type="submit" id="sale-button">  Conduct New-Sale</button>
+                        </div>
+                    </form>
+    </div>
+    <div id="form3" class="form-container">
+        <form method="post" action="https://ashimwe.tech/api/v1/post/new_item">
+                    <h2>New - Item</h2>
+                    <div id="hidden">
+                        <div class="input">
+                            <label for="new-item-name">Item name</label>
+                            <input list="item-name" id="new-item-name" name="item-name" required>
+                            <datalist id="item-name">
+                                {% for item in p %}
+                                <option value="{{ item[1] }}">
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                        <div class="category">
+                            <label for="new-item-category">Category</label>
+                            <input list="categories" id="new-item-category" name="category" required>
+                            <datalist id="categories">
+                                {% for item in n %}
+                                <option value="{{ item[1] }}">
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                    </div>
+                    <label for="new-item-quantity">Quantity*</label>
+                    <input type="text" id="new-item-quantity" name= "quantity" required>
+                    <button type="submit" id="add-button">Add -new item</button>
+                </form>
+    </div>
+
+    <div id="form4" class="form-container">
+        <form method="post" action="https://ashimwe.tech/api/v1/post/outgoing">
+            <h2>Outgoing - Item</h2>
+            <div id="hidden">
+                <div class="input">
+                    <label for="outgoing-item-name">Item name</label>
+                    <input list="item-name" id="outgoing-item-name" name="item-name" required>
+                    <datalist id="item-name">
+                        {% for item in p %}
+                        <option value="{{ item[1] }}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <label for="outgoing-branch">Branch</label>
+                <input list="Branch" id="outgoing-branch" name="Branch" required>
+                <datalist id="Branch">
+                    {% for item in l %}
+                    <option value="{{ item[1] }}">
+                    {% endfor %}
+                </datalist>
+                <div class="Amount">
+                    <label for="outgoing-quantity">Quantity*</label>
+                    <input type="text" id="outgoing-quantity" name="new-item-quantity" required>
+                    <input type="hidden" id="outgoing-quantity" name="username" value="{{ username }}" required>
+                    <button type="submit" id="outgoing-button">Approve-Out-Going Item</button>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="form5" class="form-container">
+        <form method="post" action="https://ashimwe.tech/api/v1/post/existing">
+            <h2>Existing - Item</h2>
+            <div id="hidden">
+                <div class="input">
+                    <label for="outgoing-item-name">Item name</label>
+                    <input list="item-name" id="outgoing-item-name" name="item-name" required>
+                    <datalist id="item-name">
+                        {% for item in p %}
+                        <option value="{{ item[1] }}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div class="Amount">
+                    <label for="outgoing-quantity">Quantity*</label>
+                    <input type="text" id="outgoing-quantity" name="Existing-quantity" required>
+                    <button type="submit" id="existing-insert-button">Add - New - Item</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="form6" class="form-container">
+        <h2>Remark</h2>
+        <form method="post" action="https://ashimwe.tech/api/v1/post/remark">
+            <label for="input5-1">Remark/Notice(Reporting):</label>
+            <textarea id="input5-1" name="input5-1"></textarea>
+            <button type="submit" id="submit-Remark/Notice">Submit</button>
+        </form>
+    </div>
+    <div id="form7" class="form-container">
+        <h2>Remarks</h2>
+        <div id="remarks-main">
+               {% for item in t %}
+            <div id="inside-remarks">
+                <p id=inside-remarks-inside>Id: {{ item[0] }} ||  Time: {{ item[1] }}</p>
+                <p>Message:--{{ item[2] }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+    </div>
+       <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Checkbox and form visibility management
+            const checkboxes = document.querySelectorAll('.checkbox');
+            const forms = document.querySelectorAll('.form-container');
+        
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.addEventListener('click', function () {
+                    checkboxes.forEach(cb => cb.classList.remove('active'));
+                    forms.forEach(form => form.classList.remove('active'));
+        
+                    checkbox.classList.add('active');
+                    document.getElementById(`form${index + 1}`).classList.add('active');
+                });
+            });
+        
+            // Set the first form as the default active form
+            document.getElementById('checkbox1').classList.add('active');
+            document.getElementById('form1').classList.add('active');
+        
+            // Function to handle button clicks
+            function handleButtonClick(buttonId) {
+                document.getElementById(buttonId).addEventListener('click', function() {
+                    alert('Success');
+                    setTimeout(function() {
+                        // Reload the page after a short delay
+                        location.reload();
+                    }, 1000); // Short delay to allow the alert to be seen
+                });
+            }
+        
+            // Apply the click handler to each button
+            handleButtonClick('sale-button');
+            handleButtonClick('add-button');
+            handleButtonClick('outgoing-button');
+            handleButtonClick('submit-Remark/Notice');
+            handleButtonClick('existing-insert-button');
+        });
+        </script>
+    </body>
+</html>

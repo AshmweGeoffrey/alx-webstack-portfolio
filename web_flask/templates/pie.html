@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/in-stock.png') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home-style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/pie.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <title>
+            Ax Stock
+        </title>
+        <style>
+        @import url('https://fonts.cdnfonts.com/css/abnes');
+
+        header {
+            font-family: 'abnes', sans-serif;
+        }
+        </style>
+    </head>
+    <body>
+        <header><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt=""> AX</header>
+        <div id="sidebar">
+            <ul>
+             <li><a href="/"><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt="" id="in-stock"></a></li>
+                <li><a href="home"><img src="{{ url_for('static', filename='images/home.png') }}" alt=""></a></li>
+                <li><a href="inventory"><img src="{{ url_for('static', filename='images/table.png') }}" alt=""></a></li>
+                <li><a href="sales"><img src="{{ url_for('static', filename='images/line-chart.png') }}" alt=""></a></li>
+                <li><a href="out_going" ><img src="{{ url_for('static', filename='images/transaction.png') }}" alt=""></a></li>
+                <li><a href="pie"><img src="{{ url_for('static', filename='images/pie-chart.png') }}" alt=""></a></li>
+                <li><a href="logout"><img src="{{ url_for('static', filename='images/logout.png') }}" alt="" id="logout" ></a></li>
+               <!-- Add more links as needed -->
+            </ul>
+        </div>
+        <div id="container">  
+        <div id="tot-sales">
+            <p>Total Weekly Items :{{ total_weekly }}</p>
+            <h4>Sales / Item by day (Weekly) :</h4>
+            <ul>
+                <li>Monday :{{ days['monday'] }}</li>
+                <li>Tuesday :{{ days['tuesday'] }}</li>
+                <li>Wensday :{{ days['wednesday'] }}</li>
+                <li>Thursday :{{ days['thursday'] }}</li>
+                <li>Friday :{{ days['friday'] }}</li>
+                <li>Saturday :{{ days['saturday'] }}</li>
+                <li>sunday :{{ days['sunday'] }} </li>
+            </ul>
+            <h4>Total Weekly Sales</h4>
+            <ul>
+                <li>Mobile Payment : {{ pay['Mobile Money'] }}</li>
+                <li>Card Payment : {{ pay['Pos'] }}</li>
+                <li>Cash Payment : {{ pay['Cash'] }}</li>
+                <li><h4>Total : {{ pay['total'] }}</h4></li>
+            </ul>
+            <div>
+                <p>Best selling Weekly : {{ best }}</p>
+                <p>outgoing items : {{ out_going }}</p>
+            </div>    
+        </div>
+    </div>
+        <div id="tot-icons">
+            <ul>
+                <li>
+                    <img src="{{ url_for('static', filename='images/schedule.png') }}" alt="">
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/profit.png') }}" alt="">
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/pos.png') }}" alt="">
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/smartphone.png') }}" alt="">
+                </li>
+            </ul>
+        </div>
+        <div id="stock-status">
+                <p>Sale Analysis</p>
+            </div>
+        <div id=pie>
+            <p>Sale pie-chart Analysis</p>
+        <canvas id="myPieChart"></canvas>
+        <p id="exo">{{ x }}</p>
+    </div>
+    <script src="{{ url_for('static', filename='scripts/pie.js') }}"></script>
+    </body>
+</html>

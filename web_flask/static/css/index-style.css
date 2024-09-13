@@ -1,0 +1,38 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    background-color: #fafcfb;
+    font-family: 'Oswald', sans-serif;
+}
+
+header, footer{
+    flex: 0 0 auto; /* Ensure header and footer do not grow */
+    background-color: #ffffff;
+    color: rgb(10, 10, 10);
+    padding: 10px;
+    text-align: center;
+    font-size: 24px;
+    border-bottom:1px solid #00BF63;
+}
+
+#container {
+    flex: 1 0 auto; /* Grow to fill available space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+.login-link {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.login-link img {
+    width: 20px; /* adjust as needed */
+    height: 20px; /* adjust as needed */
+}
