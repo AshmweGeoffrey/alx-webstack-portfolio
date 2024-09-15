@@ -15,9 +15,17 @@
         }
         </style>
 </head>
-<body>
+
+<body >
     <header><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt=""> AX</header>
     <div class="login-container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
         <h2>Login</h2>
         <form id="loginForm" action="/login" method="POST">
             <div class="form-group">
@@ -28,6 +36,7 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
                 <p id="error">{{ error }}</p>
+                <p>Don't have an account? <a href="/register" id=register-2>Register</a></p>
             </div>
             <button type="submit">Login</button>
         </form>

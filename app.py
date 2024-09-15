@@ -5,6 +5,7 @@ from functools import wraps
 
 app = Flask(__name__)
 app.register_blueprint(api, url_prefix='/api/v1')
+app.secret_key = 'a881f5413500986cbd88e99456623f51e6ccde187d2e399a3f4fdcfa72008b74'
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': 'Not found'}), 404

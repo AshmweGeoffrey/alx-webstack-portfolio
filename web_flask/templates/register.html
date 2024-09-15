@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/in-stock.png') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home-style.css') }}">
+        <title>
+            Ax Stock
+        </title>
+    </head>
+    <body>
+        <header><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt=""> AX</header>
+        <div id="sidebar">
+            <ul>
+                <li><a href="/"><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt="" id="in-stock"></a></li>
+               <!-- Add more links as needed -->
+            </ul>
+        
+        </div> 
+            {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        <div id="Register-1">
+            <form action="http://localhost:5000/api/v1/post/register" method="post">
+                <h1>Register Account</h1>
+                <label for="username">Username</label>
+                <input type="text" name="register-username" placeholder="Username" required>
+                <label for="password">Password</label>
+                <input type="password" name="register-password" placeholder="Password" required>
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" name="register-confirm_password" placeholder="Confirm Password" required>
+                <label for="email">Email</label>
+                <input type="email" name="register-email" placeholder="Email" required>
+                <label for="Company">Company</label>
+                <input type="text" name="register-Company" placeholder="Company" required>
+                <label for="Role">Role</label>
+                <input list="register-Role" name="register-Role" placeholder="Role" required>
+                <datalist id="register-Role">
+                                <option value="LEVEL-1">
+                                <option value="LEVEL-2">
+                                <option value="LEVEL-3">
+                            </datalist>
+                <label for="Phone">Phone</label>
+                <input type="text" name="register-Phone" placeholder="Phone" required>
+                <label for="Address">Address</label>
+                <input type="text" name="register-Address" placeholder="Address" required>
+                <input type="submit" value="Register" >
+        </div>
+    </body>
+</html>

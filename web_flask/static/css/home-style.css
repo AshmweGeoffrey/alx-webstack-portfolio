@@ -391,3 +391,94 @@ header img {
     border-radius: 3px;
     border: 1px solid #00BF63;
 }
+#Register-1 {
+    position: relative;
+    top: 2%;
+    left:10%;
+    width: 85%;
+    height: auto;
+    border: 1px solid #00BF63;
+    border-radius: 4px;
+    padding: 25px;
+}
+
+#Register-1 form {
+    display: flex;
+    flex-direction: column; /* Stack labels and inputs vertically */
+}
+
+#Register-1 label {
+    margin-top: 10px;  /* Space above each label */
+    margin-bottom: 5px; /* Space between label and input */
+    font-weight: bold;
+}
+
+#Register-1 input[type="text"],
+#Register-1 input[type="password"],
+#Register-1 input[list="register-Role"],
+#Register-1 input[type="email"] {
+    width: 100%; /* Make inputs take full width of the form */
+    padding: 10px;
+    margin-bottom: 15px; /* Space between inputs */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding doesn't overflow */
+}
+
+#Register-1 input[type="submit"] {
+    margin-top: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #00BF63;
+    color: white;
+    cursor: pointer;
+}
+
+#Register-1 input[type="submit"]:hover {
+    background-color: #00994d;
+}
+#register-2
+{
+    font-size: 20px;
+    color: #00BF63; 
+}
+/* Flash Messages */
+
+.flash-success {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 10px;
+    left: 44%;
+    height: 5%;
+    width: 30%;
+    border-radius: 10px;
+    background-color: #e3fcf0;
+    border: 1px solid #00BF63;
+    color: #00BF63;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.flash-error {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 10px;
+    left: 44%;
+    height: 5%;
+    width: 30%;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+    background-color: #f8d7da; /* Light red for error */
+    border-color: #f5c6cb;
+    color: #721c24;
+}

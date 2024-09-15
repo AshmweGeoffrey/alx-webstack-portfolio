@@ -26,6 +26,11 @@ def login():
             return render_template('login.html', error='Invalid username or password')
     else:
         return render_template('login.html')
+@app.route('/register', methods=['GET','POST'])
+def register():
+    if request.method == 'POST':
+        pass
+    return render_template('register.html')
 @app.route('/home')
 def main():
     if 'user' not in session:

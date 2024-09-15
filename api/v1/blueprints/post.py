@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, redirect, session,send_file
+from flask import Blueprint, jsonify, request, redirect, session,send_file,url_for,flash
 import pandas as pd
 from models.inventory_model import inventory
 from models.outgoing_stock import outgoing_stock
@@ -14,7 +14,10 @@ from openpyxl.styles import Font, PatternFill, Border, Side
 from openpyxl.utils import get_column_letter
 from datetime import datetime
 from sqlalchemy import create_engine
+from models.users import User
+from models import mongo_storage
 CORS(api)
+url='http://localhost:5001'
 @api.route('/post/new_item', methods=['POST'])
 def post_new_item():
     # Get form data from the request
@@ -109,6 +112,35 @@ def remark1():
     rem=remark(**response)
     rem.save()
     return "", 204
+@api.route('/post/register', methods=['POST'])
+def register():
+    # Get form data from the request
+    user_name = request.form.get('register-username')
+    email = request.form.get('register-email')
+    password = request.form.get('register-password')
+    confrim_password = request.form.get('register-confirm_password')
+    access_control = request.form.get('register-Role')
+    company = request.form.get('register-Company')
+    contact=request.form.get('register-Phone')
+    Address=request.form.get('register-Address')
+    # check password are same
+    if password != confrim_password:
+        flash("Passwords do not match",category='error')
+        return redirect('{}/register'.format(url))
+    # Process the data as needed
+    data_new_user = {
+        'user_name': user_name,
+        'email': email,
+        'password': password,
+        'access_control': access_control,
+        'company': company,
+        'contact': contact,
+        'address': Address
+    }
+    user = User(**data_new_user)
+    mongo_storage.save(user)
+    flash("Account created successfully",category='success')
+    return redirect('{}/login'.format(url))
 @api.route('/post/login', methods=['GET'])
 def login_send():
     res = storage.command("SELECT * FROM user").fetchall()
