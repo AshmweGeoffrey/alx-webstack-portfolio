@@ -35,10 +35,10 @@
         </div>
         <div id="container">
             <div id="container-1">
-                <img src="{{ url_for('static', filename='images/login-icon.jpeg') }}" alt="">
+                <a href="profile"><img src="{{ url_for('static', filename='images/login-icon.jpeg') }}" alt=""></a>
                 <div id="text-container">
-                    <p>Username:<p1>{{ x[0] }}</p1></p>
-                    <p>Date:{{ x[1] }}</p>
+                    <p>Username:<p1>{{ username }}</p1></p>
+                    <p>Date:{{ date }}</p>
                 </div>
             </div>
             <div id="new_shit">

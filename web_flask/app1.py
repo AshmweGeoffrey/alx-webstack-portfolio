@@ -44,12 +44,12 @@ def main():
         return redirect('/login')
     print(session)
     send_inventory=get('{}/inventory'.format(local_api_url)).json()
-    send=str(datetime.now())
+    datetime_1=str(datetime.now())
     send_category=get('{}/category'.format(local_api_url)).json()
     send_branch=get('{}/branch'.format(local_api_url)).json()
     send_remak=get('{}/remarks'.format(local_api_url)).json()
     username=session['user_name']
-    return render_template('home.html',x=send,p=send_inventory,n=send_category,l=send_branch,username=username,t=send_remak) 
+    return render_template('home.html',p=send_inventory,n=send_category,l=send_branch,username=username,t=send_remak,date=datetime_1) 
 @app.route('/sales')
 def sales():
     if 'user_name' not in session:
@@ -101,5 +101,11 @@ def login_init():
 @app.route('/session', methods=['GET'])
 def session_data():
     return jsonify({'user': session.get('user_name')})
+@app.route('/profile')
+def profile():
+    if 'user_name' not in session:
+        # User is not logged in, redirect to the login page
+        return redirect('/login')
+    return render_template('profile.html')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001,debug=True)
