@@ -16,6 +16,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from models.users import User
 from models import mongo_storage
+from bcrypt import hashpw, gensalt
 CORS(api)
 url='http://localhost:5001'
 @api.route('/post/new_item', methods=['POST'])
@@ -127,6 +128,8 @@ def register():
     if password != confrim_password:
         flash("Passwords do not match",category='error')
         return redirect('{}/register'.format(url))
+    else:
+        password = hashpw(password.encode('utf-8'), gensalt())
     # Process the data as needed
     data_new_user = {
         'user_name': user_name,
@@ -135,7 +138,7 @@ def register():
         'access_control': access_control,
         'company': company,
         'contact': contact,
-        'address': Address
+        'address': Address,
     }
     user = User(**data_new_user)
     mongo_storage.save(user)

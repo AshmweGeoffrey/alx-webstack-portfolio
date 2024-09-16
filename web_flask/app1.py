@@ -1,5 +1,10 @@
 from flask import Flask, render_template,redirect, request, jsonify, session
 from requests import get
+from pymongo import MongoClient
+from bcrypt import checkpw
+from datetime import datetime
+from bson.json_util import dumps
+Mongo_db='Ax'
 app = Flask(__name__)
 app.config['SECRET_KEY'] ='a881f5413500986cbd88e99456623f51e6ccde187d2e399a3f4fdcfa72008b74'
 app.static_folder = 'static'
@@ -14,12 +19,13 @@ def login():
         # Get form data from the request
         username = request.form.get('username')
         password = request.form.get('password')
-        users=get('{}/post/login'.format(local_api_url)).json()
-        # Fetch user data from the database
-        # Check if the provided credentials are valid
-        if username in users and users[username] == password:
-            session['user'] = username
-            x=username
+        client=MongoClient(host='localhost',port= 27017)
+        db = client[Mongo_db]
+        collection = db['user']
+        collected_data=collection.find_one({'user_name':username})   
+        if checkpw(password.encode('utf-8'),collected_data['password'].encode('utf-8')):
+            for key,data in collected_data.items():
+                session[key]=data
             return redirect('/home')
         # Return an error message for invalid credentials
         else:
@@ -33,29 +39,30 @@ def register():
     return render_template('register.html')
 @app.route('/home')
 def main():
-    if 'user' not in session:
+    if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
+    print(session)
     send_inventory=get('{}/inventory'.format(local_api_url)).json()
-    send=get('{}/user/{}'.format(local_api_url,session['user'])).json()
+    send=str(datetime.now())
     send_category=get('{}/category'.format(local_api_url)).json()
     send_branch=get('{}/branch'.format(local_api_url)).json()
     send_remak=get('{}/remarks'.format(local_api_url)).json()
-    username=session['user']
+    username=session['user_name']
     return render_template('home.html',x=send,p=send_inventory,n=send_category,l=send_branch,username=username,t=send_remak) 
 @app.route('/sales')
 def sales():
-    if 'user' not in session:
+    if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
     send_sales=get('{}/sales'.format(local_api_url)).json()
     return render_template('sales.html',x=send_sales)
 @app.route('/pie')
 def pie():
-    if 'user' not in session:
+    if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
-    if session['user'] != 'Ashimwe_Geoffrey':
+    if session['user_name'] != 'Ashimwe_Geoffrey':
         return redirect('/noaccess') 
     send_days=dict(get('{}/pie/days'.format(local_api_url)).json())
     send_total_weeekly_items=get('{}/pie/total_weeekly_items'.format(local_api_url)).json()
@@ -66,20 +73,20 @@ def pie():
     return render_template('pie.html',x=send_category_percentage,total_weekly=send_total_weeekly_items,days=send_days,best=send_best_selling,out_going=send_out_going,pay=send_payment)
 @app.route('/noaccess')
 def noaccess():
-    if 'user' not in session:
+    if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
     return render_template('noaccess.html')
 @app.route('/inventory')
 def inventory():
-    if 'user' not in session:
+    if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
     send_inventory=get('{}/inventory'.format(local_api_url)).json()
     return render_template('inventory.html',x=send_inventory)
 @app.route('/out_going')
 def out_going():
-    if 'user' not in session:
+    if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
     send_out_going=get('{}/out_going'.format(local_api_url)).json()
@@ -89,10 +96,10 @@ def index():
     return render_template('index.html')
 @app.route('/logout')
 def login_init():
-    session.pop('user', None)
+    session.pop('user_name', None)
     return redirect('/login')
 @app.route('/session', methods=['GET'])
 def session_data():
-    return jsonify({'user': session.get('user')})
+    return jsonify({'user': session.get('user_name')})
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001,debug=True)
