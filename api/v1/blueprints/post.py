@@ -17,6 +17,8 @@ from sqlalchemy import create_engine
 from models.users import User
 from models import mongo_storage
 from bcrypt import hashpw, gensalt
+import subprocess
+import shlex
 CORS(api)
 url='http://localhost:5001'
 @api.route('/post/new_item', methods=['POST'])
@@ -38,7 +40,8 @@ def post_new_item():
     print(response)
     inv=inventory(**response)
     inv.save()
-    return "", 204
+    flash("New Item Added",category='success')
+    return redirect('{}/home'.format(url))
 @api.route('/post/outgoing', methods=['POST'])
 def post_outgoing():
     # Get form data from the request
@@ -62,7 +65,8 @@ def post_outgoing():
     print(response)
     out= outgoing_stock(**response)
     out.save()
-    return "", 204
+    flash("Out-Going Item recorded",category='success')
+    return redirect('{}/home'.format(url))
 @api.route('/post/sale', methods=['POST'])
 def post_sale():
     # Get form data from the request
@@ -86,7 +90,8 @@ def post_sale():
         }
     sale= sale_weekly(**response)
     sale.save()
-    return "", 204
+    flash("Sale Recorded",category='success')
+    return redirect('{}/home'.format(url))
 @api.route('/post/existing', methods=['POST'])
 def existing_item():
     # Get form data from the request
@@ -102,7 +107,8 @@ def existing_item():
         }
     item_name = item_name.replace("'", "\\'")
     res=storage.command("UPDATE inventory SET inventory_quantity = inventory_quantity+{:d} WHERE name='{}'".format(int(quantity),item_name))
-    return "", 204
+    flash("Item Added Successfully",category='success')
+    return redirect('{}/home'.format(url))
 @api.route('/post/remark', methods=['POST'])
 def remark1():
     message = request.form.get('input5-1')
@@ -112,7 +118,8 @@ def remark1():
     print(response)
     rem=remark(**response)
     rem.save()
-    return "", 204
+    flash("Report Added",category='success')
+    return redirect('{}/home'.format(url))
 @api.route('/post/register', methods=['POST'])
 def register():
     # Get form data from the request
@@ -124,6 +131,7 @@ def register():
     company = request.form.get('register-Company')
     contact=request.form.get('register-Phone')
     Address=request.form.get('register-Address')
+    db_name=("{}_db".format(company))
     # check password are same
     if password != confrim_password:
         flash("Passwords do not match",category='error')
@@ -139,8 +147,14 @@ def register():
         'company': company,
         'contact': contact,
         'address': Address,
+        'db_name': db_name
     }
     user = User(**data_new_user)
+    # create database
+    create_database = "CREATE DATABASE IF NOT EXISTS {}".format(db_name)
+    mysql_command = f"mysql -uroot -pAshimwe#001 -e {shlex.quote(create_database)}"
+    subprocess.run(mysql_command, shell=True, check=True, capture_output=True, text=True)
+    print(os.system('mysql -uroot -pAshimwe#001 {} < api/v1/blueprints/database/initial-database'.format(db_name))) 
     mongo_storage.save(user)
     flash("Account created successfully",category='success')
     return redirect('{}/login'.format(url))

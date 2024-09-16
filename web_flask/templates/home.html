@@ -41,9 +41,19 @@
                     <p>Date:{{ date }}</p>
                 </div>
             </div>
+            
             <div id="new_shit">
+                {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
         <div id="second_shit">
+            
     <div class="checkbox-container">
+        
         <div id="checkbox1" class="checkbox black"></div>
         <div id="checkbox2" class="checkbox red"></div>
         <div id="checkbox3" class="checkbox green"></div>
@@ -55,7 +65,7 @@
 
     <div id="form1" class="form-container">
         <h2>Weekly Report</h2>
-        <form method="post" action="https://ashimwe.tech/api/v1/post/download">
+        <form method="post" action="htttp://localhost:5000/api/v1/post/download">
             <label for="downloadButton">Download Weekly Report</label>
             <button type="submit" id="downloadButton">Initiate-Download</button>
             <div class="legend-container">
@@ -71,7 +81,7 @@
 
     <div id="form2" class="form-container">
         <h2>Sale</h2>
-                    <form method="post" action="https://ashimwe.tech/api/v1/post/sale">
+                    <form method="post" action="htttp://localhost:5000/api/v1/post/sale">
                         <div class="input">
                             <label for="sale-item-name">Item name</label>
                             <input list="item-name" id="sale-item-name" name="item-name" required>
@@ -97,7 +107,7 @@
                     </form>
     </div>
     <div id="form3" class="form-container">
-        <form method="post" action="https://ashimwe.tech/api/v1/post/new_item">
+        <form method="post" action="http://localhost:5000/api/v1/post/new_item">
                     <h2>New - Item</h2>
                     <div id="hidden">
                         <div class="input">
@@ -126,7 +136,7 @@
     </div>
 
     <div id="form4" class="form-container">
-        <form method="post" action="https://ashimwe.tech/api/v1/post/outgoing">
+        <form method="post" action="http://localhost:5000/api/v1/post/outgoing">
             <h2>Outgoing - Item</h2>
             <div id="hidden">
                 <div class="input">
@@ -157,7 +167,7 @@
     </div>
 
     <div id="form5" class="form-container">
-        <form method="post" action="https://ashimwe.tech/api/v1/post/existing">
+        <form method="post" action="http://localhost:5000/api/v1/post/existing">
             <h2>Existing - Item</h2>
             <div id="hidden">
                 <div class="input">
@@ -180,7 +190,7 @@
 
     <div id="form6" class="form-container">
         <h2>Remark</h2>
-        <form method="post" action="https://ashimwe.tech/api/v1/post/remark">
+        <form method="post" action="http://localhost:5000/api/v1/post/remark">
             <label for="input5-1">Remark/Notice(Reporting):</label>
             <textarea id="input5-1" name="input5-1"></textarea>
             <button type="submit" id="submit-Remark/Notice">Submit</button>

@@ -11,6 +11,7 @@ class User(Document):
     company = StringField(required=True)
     created_at = DateTimeField(required=True,default=str(datetime.now()))
     contact=StringField(required=True)
-    address=StringField(required=True) 
+    address=StringField(required=True)
+    db_name=StringField(required=True)
     def close(self):
         mongo_storage.close()
