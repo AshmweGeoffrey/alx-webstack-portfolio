@@ -4,15 +4,11 @@ from uuid import uuid4
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.base_model import Base
-from web_flask.app1 import current_db
 class DBStorage:
     __engine = None
     __session = None
-    def __init__(self):
-        if current_db is None:
-            self.__engine = create_engine('mysql+mysqldb://root:Ashimwe#001@localhost:3306/{}'.format('AX_STOCK_ALX_PROJECT'),pool_pre_ping=True)
-        else:
-            self.__engine = create_engine('mysql+mysqldb://root:Ashimwe#001@localhost:3306/{}'.format(current_db),pool_pre_ping=True)
+    def __init__(self,db_name):
+        self.__engine = create_engine('mysql+mysqldb://root:Ashimwe#001@localhost:3306/{}'.format(db_name), pool_pre_ping=True)
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()

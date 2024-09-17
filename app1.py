@@ -4,13 +4,13 @@ from pymongo import MongoClient
 from bcrypt import checkpw
 from datetime import datetime
 from bson.json_util import dumps
-from ..models.engine import storage
 Mongo_db='Ax'
+current_db=None
 app = Flask(__name__)
 app.config['SECRET_KEY'] ='a881f5413500986cbd88e99456623f51e6ccde187d2e399a3f4fdcfa72008b74'
 app.static_folder = 'static'
 x=None
-current_db='testcompany_3_db'
+current_db=None
 local_api_url = 'http://localhost:5000/api/v1'
 @app.errorhandler(404)
 def not_found(error):
@@ -29,7 +29,6 @@ def login():
             for key,data in collected_data.items():
                 session[key]=data
             current_db=collected_data['db_name']
-            print(current_db)
             flash('Welcome {}'.format(session['user_name']),category='success')
             return redirect('/home')
         # Return an error message for invalid credentials
