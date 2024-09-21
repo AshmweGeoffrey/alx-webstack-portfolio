@@ -4,6 +4,7 @@ from models.base_model import BaseModel ,Base
 from datetime import datetime
 from models.category import category
 class inventory(BaseModel,Base):
+    # sql model for the inventory table
     __tablename__='inventory'
     id=Column(String(50),nullable=False)
     name=Column(String(64),nullable=False,primary_key=True)

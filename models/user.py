@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
 from requests import get
 class user(BaseModel,Base):
+    # old sql model [Discontinued]!!!
     __tablename__='user'
     id=Column(String(50),nullable=False)
     name=Column(String(32), primary_key=True, nullable=False)

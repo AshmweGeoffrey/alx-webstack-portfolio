@@ -3,6 +3,7 @@ from sqlalchemy import Column, String,DateTime
 from datetime import datetime
 from sqlalchemy.orm import relationship 
 class remark(BaseModel,Base):
+    # sql model for the remark table [reporting]
     __tablename__='remark'
     id=Column(String(50),primary_key=True)
     time_stamp=Column(DateTime,nullable=False)

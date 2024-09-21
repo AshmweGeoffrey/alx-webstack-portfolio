@@ -3,6 +3,7 @@ from  uuid import uuid4
 from datetime import datetime
 from models import mongo_storage
 class User(Document):
+    # mongoengine schema for the user collection
     _id=StringField(default=lambda: str(uuid4()),primary_key=True)
     user_name = StringField(required=True)
     email = StringField(required=True)

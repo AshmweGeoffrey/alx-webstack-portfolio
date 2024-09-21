@@ -5,6 +5,7 @@ from datetime import datetime
 from models.user import user
 from models.inventory_model import inventory
 class sale_weekly(BaseModel,Base):
+    # sql model for the sale_weekly table
     __tablename__ = 'sale_weekly'
     id = Column(String(50),primary_key=True,nullable=False)
     item_name = Column(String(64),ForeignKey('inventory.name'),unique=True)

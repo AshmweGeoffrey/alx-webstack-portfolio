@@ -3,6 +3,8 @@ from sqlalchemy import create_engine, text  # Import text for raw SQL
 from sqlalchemy.orm import sessionmaker
 from models.base_model import Base
 
+
+# DBStorage class initializes the database connection and provides methods to interact with the database[SqlAlchemy[sql]]
 class DBStorage:
     engine = None
     session = None

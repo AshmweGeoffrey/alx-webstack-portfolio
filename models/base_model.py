@@ -7,6 +7,7 @@ from app1 import current_db
 import redis
 Base=declarative_base()
 class BaseModel:
+    # Base class for all the models in the application
     def __init__(self,*args,**kwargs):
         if kwargs:
             kwargs['id']=str(uuid4())
@@ -32,6 +33,7 @@ class BaseModel:
     def __del__(self):
         pass
     def save(self):
+        # save the current object to the database
         if current_db is not None:
             client = redis.Redis(host='localhost', port=6379, db=0)
             db_name=(client.get(current_db)).decode('utf-8')
@@ -39,6 +41,7 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
     def select_all(self,order):
+        # custom select all query for the current table
         if current_db is not None:
             client = redis.Redis(host='localhost', port=6379, db=0)
             db_name=(client.get(current_db)).decode('utf-8')
@@ -58,6 +61,7 @@ class BaseModel:
             inner_list=[]
         return main_list
     def get_user(self, user_name):
+        # -+> get the user from the current table [Discontinued]!!
         if current_db is not None:
             client = redis.Redis(host='localhost', port=6379, db=0)
             db_name=(client.get(current_db)).decode('utf-8')

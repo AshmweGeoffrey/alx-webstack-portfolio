@@ -1,5 +1,6 @@
 from mongoengine import connect,disconnect,Document
 
+# MongoStorage class initializes the mongo database connection and provides methods to interact with the database[MongoEngine]
 class MongoStorage:
     __engine = None
     __session = None
