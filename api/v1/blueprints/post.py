@@ -1,3 +1,4 @@
+# messy code
 from flask import Blueprint, jsonify, request, redirect, session,send_file,url_for,flash
 import pandas as pd
 from models.inventory_model import inventory
@@ -25,11 +26,15 @@ from pymongo import MongoClient
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import os
+# Create a Blueprint for the post endpoints
 CORS(api)
-url='http://localhost:5001'
-email_url='http://localhost:5001/activate'
-sender_password = "nfxu suvy cdlr hqbe"
-sender_email = "axsystem596@gmail.com"
+url=os.getenv('API_BLUEPRINTS_URL')
+activation_url=os.getenv('API_ACTIVATION_URL')
+sender_password = os.getenv('API_SENDER_PASSWORD')
+sender_email = os.getenv('API_SENDER_EMAIL')
+db_password = os.getenv('API_DB_PASSWORD')
+db_user = os.getenv('API_DB_USER')
 def send_email(sender_email, sender_password, receiver_email, subject, html_body):
     # Create a multipart message
     message = MIMEMultipart()
@@ -205,15 +210,6 @@ def register():
     if collection.find_one({'user_name':user_name}):
         flash("User already exists",category='error')
         return redirect('{}/register'.format(url))
-    if collection.find_one({'company':company}): 
-        mongo_storage.save(user)
-        flash("Company already exists Added User",category='success')
-        return redirect('{}/register'.format(url))
-    create_database = "CREATE DATABASE IF NOT EXISTS {}".format(db_name)
-    mysql_command = f"mysql -uroot -pAshimwe#001 -e {shlex.quote(create_database)}"
-    subprocess.run(mysql_command, shell=True, check=True, capture_output=True, text=True)
-    print(os.system('mysql -uroot -pAshimwe#001 {} < api/v1/blueprints/database/initial-database'.format(db_name))) 
-    mongo_storage.save(user)
     #activating the user
     subject = "Account Activation"
     user_name = data_new_user['user_name']
@@ -251,18 +247,30 @@ def register():
         <p>Thank you!</p>
     </body>
     </html>
-    """.format(user_name,email_url,user_name)
+    """.format(user_name,activation_url,user_name)
     receiver_email = data_new_user['email']
     send_email(sender_email, sender_password, receiver_email, subject, body)
+    # creating database(Multi-tenancy)
+    if collection.find_one({'company':company}): 
+        mongo_storage.save(user)
+        flash("Company already exists Added User",category='success')
+        return redirect('{}/register'.format(url))
+    create_database = "CREATE DATABASE IF NOT EXISTS {}".format(shlex.quote(db_name))
+    mysql_command = f"mysql -u{shlex.quote(db_user)} -p{shlex.quote(db_password)} -e {shlex.quote(create_database)}"  
+    subprocess.run(mysql_command, shell=True, check=True, capture_output=True, text=True)
+    print(os.system('mysql -u{} -p{} {} < api/v1/blueprints/database/initial-database'.format(db_name,db_password,db_name))) 
+    mongo_storage.save(user)
     flash("Account created successfully",category='success')
     return redirect('{}/login'.format(url))
 @api.route('/post/login', methods=['GET'])
 def login_send():
+    #old code [Discounted]
     res = storage.command("SELECT * FROM user").fetchall()
     users = {user[1]: user[2] for user in res}
     return jsonify(users)
 @api.route('/post/download', methods=['POST', 'GET'])
 def download():
+    # Generate the weekly report & Download the file
     excel_file, filename = generate_weekly_report()
     if excel_file and filename:
         return send_file(
@@ -339,3 +347,4 @@ def generate_weekly_report():
     except Exception as e:
         print(f"An error occurred: {str(e)}")
         return None, None
+    
