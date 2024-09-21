@@ -8,3 +8,11 @@ VAR_LOCAL_API_URL='http://localhost:5000/api/v1'
 Main Api: final-touches
 
 API_SECRET_KEY='a881f5413500986cbd88e99456623f51e6ccde187d2e399a3f4fdcfa72008b74'
+ 
+ Blueprints_post
+ API_BLUEPRINTS_URL='http://localhost:5001'
+ API_ACTIVATION_URL='http://localhost:5001/activate'
+ API_SENDER_EMAIL="axsystem596@gmail.com"
+ API_SENDER_PASSWORD="nfxu suvy cdlr hqbe"
+ API_DB_PASSWORD="Ashimwe#001"
+ API_DB_USER="root"
