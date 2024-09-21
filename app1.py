@@ -4,14 +4,15 @@ from pymongo import MongoClient
 from bcrypt import checkpw
 from datetime import datetime
 import redis
+import os
 import secrets
-Mongo_db='Ax'
-current_db='tempo'
+Mongo_db=os.getenv('VAR_MONGO_DB')
+current_db=os.getenv('VAR_CURRENT_DB')
 app = Flask(__name__)
-app.config['SECRET_KEY'] ='a881f5413500986cbd88e99456623f51e6ccde187d2e399a3f4fdcfa72008b74'
+app.config['SECRET_KEY'] = os.getenv('VAR_SECRET_KEY')
 app.static_folder = 'static'
 x=None
-local_api_url = 'http://localhost:5000/api/v1'
+local_api_url = os.getenv('VAR_LOCAL_API_URL')
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
@@ -28,6 +29,9 @@ def login():
         if checkpw(password.encode('utf-8'),collected_data['password'].encode('utf-8')):
             for key,data in collected_data.items():
                 session[key]=data
+            if session['status'] == 'inactive':
+                flash('Your account is inactive',category='error')
+                return render_template('login.html')
             db_collected=collected_data['db_name']
             client = redis.Redis(host='localhost', port=6379, db=0)
             client.set(current_db,db_collected)

@@ -27,16 +27,20 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 CORS(api)
 url='http://localhost:5001'
-email_url='http://localhost/activate'
+email_url='http://localhost:5001/activate'
 sender_password = "nfxu suvy cdlr hqbe"
 sender_email = "axsystem596@gmail.com"
-def send_email(sender_email, sender_password, receiver_email, subject, body):
+def send_email(sender_email, sender_password, receiver_email, subject, html_body):
+    # Create a multipart message
     message = MIMEMultipart()
     message['From'] = sender_email
     message['To'] = receiver_email
     message['Subject'] = subject
-    message.attach(MIMEText(body, 'plain'))
 
+    # Attach the HTML body
+    message.attach(MIMEText(html_body, 'html'))
+
+    # Connect to the server and send the email
     with smtplib.SMTP('smtp.gmail.com', 587) as server:
         server.starttls()
         server.login(sender_email, sender_password)
@@ -213,7 +217,41 @@ def register():
     #activating the user
     subject = "Account Activation"
     user_name = data_new_user['user_name']
-    body = "Your account has been created successfully. Please click the following link to activate {}/{}.".format(email_url,user_name)
+    # HTML body of the email
+    body = """
+    <html>
+    <head>
+    <style>
+        /* Fallback fonts since @import may not work in most email clients */
+        header {{
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            color: #00BF63;
+            border-bottom: 1px solid #00BF63;
+            padding-bottom: 10px;
+        }}
+
+        h1 {{
+            font-family: 'Verdana', sans-serif;
+            color: #4CAF50;
+        }}
+
+        p {{
+            font-family: 'Tahoma', sans-serif;
+            font-size: 16px;
+        }}
+    </style>
+    </head>
+    <body>
+    <header>Ax</header>
+        <h2>Hello {}</h2>
+        <h3>Activate Your Account</h3>
+        <p>Please click the link below to activate your account:</p>
+        <p><a href="{}/{}">Activate Account</a></p>
+        <p>Thank you!</p>
+    </body>
+    </html>
+    """.format(user_name,email_url,user_name)
     receiver_email = data_new_user['email']
     send_email(sender_email, sender_password, receiver_email, subject, body)
     flash("Account created successfully",category='success')
