@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from models.sale_weekly import sale_weekly
 from . import api
+# api endpoint to get all sales,order by time_stamp
 @api.route('/sales', methods=['GET'])
 def get_sales():
     order="ORDER BY time_stamp DESC"

@@ -4,10 +4,12 @@ from . import api
 from requests import get
 @api.route('/category', methods=['GET'])
 def get_category():
+    # retrive category_name from database
     category_1= category().select_all(None)
     return jsonify(category_1)
 @api.route('/category/percentage', methods=['GET'])
 def get_category_percentage():
+    # retrive category, percentage from database
     category_1= category().select_all(None)
     d={}
     for i in category_1:
