@@ -1,23 +1,66 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <link rel="shortcut icon" href="{{ url_for('static', filename='images/in-stock.png') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/home-style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/index-style.css') }}">
-        <title>
-            Ax Stock
-        </title>
-        <style>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/in-stock.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-index.css') }}">
+    <title>Ax</title>
+    <style>
         @import url('https://fonts.cdnfonts.com/css/abnes');
 
         header {
             font-family: 'abnes', sans-serif;
         }
-        </style>
-    </head>
-    <body>
-        <a href="login" class="login-link"><img src="{{ url_for('static', filename='images/login-icon.jpeg') }}" alt=""></a>
-        <header><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt=""> AX</header>
-        <div id="container"></div>
-    </body>
+        </style> 
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <img src="{{ url_for('static', filename='images/in-stock.png') }}" alt="Ax Logo">
+                <span>AX</span>
+            </div>
+            <a href="login" class="login-link"><img src="{{ url_for('static', filename='images/login-icon.jpeg') }}" alt="Login"></a>
+        </div>
+    </header>
+
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Efficient Stock Management</h1>
+            <p>Streamline your inventory control with Ax Stock Management System.</p>
+            <a href="/register" class="btn-primary">Get Started</a>
+        </div>
+    </section>
+
+    <section class="feature-grid">
+        <div class="feature-item">
+            <h3>Real-time Tracking</h3>
+            <p>Monitor your stock levels in real-time across multiple locations.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Automated Stock status report generated</h3>
+            <p>download an Excel formated report on the current status and accounting of the stock.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Insightful Analytics</h3>
+            <p>Generate detailed reports to optimize your inventory management.</p>
+        </div>
+    </section>
+
+    <section class="promo">
+        <div class="container">
+            <h2>Special Offer</h2>
+            <p>Sign up now and get 30 days free trial!</p>
+            <a href="/register" class="btn-secondary">Sign Up</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Ax Stock Management. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
 </html>

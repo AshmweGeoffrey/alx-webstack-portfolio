@@ -3,6 +3,8 @@ import pandas as pd
 from models.inventory_model import inventory
 from models.outgoing_stock import outgoing_stock
 from models.sale_weekly import sale_weekly
+from models.category import category
+from models.branch import branch
 from models.remark import remark
 from . import api
 from flask_cors import CORS
@@ -19,8 +21,26 @@ from models import mongo_storage
 from bcrypt import hashpw, gensalt
 import subprocess
 import shlex
+from pymongo import MongoClient
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 CORS(api)
 url='http://localhost:5001'
+email_url='http://localhost/activate'
+sender_password = "nfxu suvy cdlr hqbe"
+sender_email = "axsystem596@gmail.com"
+def send_email(sender_email, sender_password, receiver_email, subject, body):
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = receiver_email
+    message['Subject'] = subject
+    message.attach(MIMEText(body, 'plain'))
+
+    with smtplib.SMTP('smtp.gmail.com', 587) as server:
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.send_message(message)
 @api.route('/post/new_item', methods=['POST'])
 def post_new_item():
     # Get form data from the request
@@ -120,6 +140,29 @@ def remark1():
     rem.save()
     flash("Report Added",category='success')
     return redirect('{}/home'.format(url))
+@api.route('/post/category', methods=['POST'])
+def add_category():
+    category_1 = request.form.get('category')
+    response = {
+            'name': category_1,
+            'percentage':'0%'
+        }
+    print(response)
+    cat=category(**response)
+    cat.save()
+    flash("Category Added",category='success')
+    return redirect('{}/set_up'.format(url))
+@api.route('/post/branch', methods=['POST'])
+def add_branch():
+    branch_name = request.form.get('branch')
+    response = {
+            'branch_name': branch_name
+        }
+    print(response)
+    br=branch(**response)
+    br.save()
+    flash("Branch Added",category='success')
+    return redirect('{}/set_up'.format(url))
 @api.route('/post/register', methods=['POST'])
 def register():
     # Get form data from the request
@@ -147,15 +190,32 @@ def register():
         'company': company,
         'contact': contact,
         'address': Address,
-        'db_name': db_name
+        'db_name': db_name,
+        'status':'inactive'
     }
     user = User(**data_new_user)
     # create database
+    client=MongoClient('localhost', 27017)
+    db=client['Ax']
+    collection=db['user']
+    if collection.find_one({'user_name':user_name}):
+        flash("User already exists",category='error')
+        return redirect('{}/register'.format(url))
+    if collection.find_one({'company':company}): 
+        mongo_storage.save(user)
+        flash("Company already exists Added User",category='success')
+        return redirect('{}/register'.format(url))
     create_database = "CREATE DATABASE IF NOT EXISTS {}".format(db_name)
     mysql_command = f"mysql -uroot -pAshimwe#001 -e {shlex.quote(create_database)}"
     subprocess.run(mysql_command, shell=True, check=True, capture_output=True, text=True)
     print(os.system('mysql -uroot -pAshimwe#001 {} < api/v1/blueprints/database/initial-database'.format(db_name))) 
     mongo_storage.save(user)
+    #activating the user
+    subject = "Account Activation"
+    user_name = data_new_user['user_name']
+    body = "Your account has been created successfully. Please click the following link to activate {}/{}.".format(email_url,user_name)
+    receiver_email = data_new_user['email']
+    send_email(sender_email, sender_password, receiver_email, subject, body)
     flash("Account created successfully",category='success')
     return redirect('{}/login'.format(url))
 @api.route('/post/login', methods=['GET'])

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+                <link rel="shortcut icon" href="{{ url_for('static', filename='images/in-stock.png') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home-style.css') }}">
+        <title>
+            Ax Stock
+        </title>
+    </head>
+    <body>
+        <header><img src="images/in-stock.png" alt=""> AX</header>
+        <div id="sidebar">
+            <ul>
+                <li><a href="/"><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt="" id="in-stock"></a></li>
+                <li><a href="logout"><img src="{{ url_for('static', filename='images/logout.png') }}" alt="" id="logout" ></a></li>
+               <!-- Add more links as needed -->
+            </ul>
+        </div>
+        <div id="container">
+            <div id="activated">
+                <h1> Conguratulations! {{ p }} Your account has been activated. </h1>
+                <h3><p> You can now login to your account. </p></h3>
+                <button type="submit" onclick="location.href='/login'">Login</button>
+            </div>
+        </div>
+    </body>
+</html>

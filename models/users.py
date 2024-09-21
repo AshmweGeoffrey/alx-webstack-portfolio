@@ -13,5 +13,6 @@ class User(Document):
     contact=StringField(required=True)
     address=StringField(required=True)
     db_name=StringField(required=True)
+    status=StringField(required=True,default='inactive')
     def close(self):
         mongo_storage.close()

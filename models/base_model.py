@@ -3,6 +3,8 @@ from datetime import datetime
 import models
 from uuid import uuid4
 from sqlalchemy.ext.declarative import  declarative_base
+from app1 import current_db
+import redis
 Base=declarative_base()
 class BaseModel:
     def __init__(self,*args,**kwargs):
@@ -16,7 +18,7 @@ class BaseModel:
     def read(self):
         pass
 
-    def update(self):
+    def update_db_name(self):
         pass
 
     def delete(self):
@@ -30,9 +32,17 @@ class BaseModel:
     def __del__(self):
         pass
     def save(self):
+        if current_db is not None:
+            client = redis.Redis(host='localhost', port=6379, db=0)
+            db_name=(client.get(current_db)).decode('utf-8')
+            models.storage.connect(db_name)
         models.storage.new(self)
         models.storage.save()
     def select_all(self,order):
+        if current_db is not None:
+            client = redis.Redis(host='localhost', port=6379, db=0)
+            db_name=(client.get(current_db)).decode('utf-8')
+            models.storage.connect(db_name)
         table_name=self.__tablename__
         if order is None:
             query="SELECT * FROM {:s}".format(table_name)
@@ -48,6 +58,10 @@ class BaseModel:
             inner_list=[]
         return main_list
     def get_user(self, user_name):
+        if current_db is not None:
+            client = redis.Redis(host='localhost', port=6379, db=0)
+            db_name=(client.get(current_db)).decode('utf-8')
+            models.storage.connect(db_name)
         table_name = self.__tablename__
         result = models.storage.command("SELECT name FROM {} WHERE name='{}'".format(table_name, user_name))
         main_list = []
