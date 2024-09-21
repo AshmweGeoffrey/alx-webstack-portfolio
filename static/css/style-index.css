@@ -47,7 +47,7 @@ header img {
 }
 
 .hero {
-    background: linear-gradient(rgba(0, 191, 99, 0.7), rgba(0, 191, 99, 0.7)), url('fun-stock.jpg') no-repeat center center/cover;
+    background: #1ccc77;
     height: 400px;
     display: flex;
     justify-content: center;

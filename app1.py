@@ -115,7 +115,7 @@ def index():
         return redirect('/home')
     return render_template('index.html')
 @app.route('/activate/<user_name>', methods=['GET'])
-def activate():
+def activate(user_name):
     user_name=request.view_args['user_name']
     client=MongoClient(host='localhost',port= 27017)
     db = client[Mongo_db]
