@@ -27,7 +27,9 @@ def login():
         client=MongoClient(host='localhost',port= 27017)
         db = client[Mongo_db]
         collection = db['user']
-        collected_data=collection.find_one({'user_name':username})   
+        collected_data=collection.find_one({'user_name':username})
+        if not collected_data:
+            return render_template('login.html', error='Invalid username or password') 
         if checkpw(password.encode('utf-8'),collected_data['password'].encode('utf-8')):
             for key,data in collected_data.items():
                 session[key]=data

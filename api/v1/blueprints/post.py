@@ -258,7 +258,7 @@ def register():
     create_database = "CREATE DATABASE IF NOT EXISTS {}".format(shlex.quote(db_name))
     mysql_command = f"mysql -u{shlex.quote(db_user)} -p{shlex.quote(db_password)} -e {shlex.quote(create_database)}"  
     subprocess.run(mysql_command, shell=True, check=True, capture_output=True, text=True)
-    print(os.system('mysql -u{} -p{} {} < api/v1/blueprints/database/initial-database'.format(db_name,db_password,db_name))) 
+    print(os.system('mysql -u{} -p{} {} < api/v1/blueprints/database/initial-database'.format(db_user,db_password,db_name))) 
     mongo_storage.save(user)
     flash("Account created successfully",category='success')
     return redirect('{}/login'.format(url))
