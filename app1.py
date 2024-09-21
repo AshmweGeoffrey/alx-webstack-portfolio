@@ -11,13 +11,15 @@ current_db=os.getenv('VAR_CURRENT_DB')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('VAR_SECRET_KEY')
 app.static_folder = 'static'
-x=None
 local_api_url = os.getenv('VAR_LOCAL_API_URL')
+app.config['SESSION_COOKIE_SECURE'] = True
 @app.errorhandler(404)
 def not_found(error):
+    # 404 error page
     return render_template('404.html'), 404
 @app.route('/login', methods=['POST','GET'])
 def login():
+    # implement login page
     if request.method == 'POST':
         # Get form data from the request
         username = request.form.get('username')
@@ -44,9 +46,11 @@ def login():
         return render_template('login.html')
 @app.route('/register', methods=['GET'])
 def register():
+    # Redirect to the register page
     return render_template('register.html')
 @app.route('/set_up', methods=['GET'])
 def set_up():
+    # load the set-up page construct db category and branch
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
@@ -58,9 +62,11 @@ def set_up():
     return render_template('set-up.html',o=send_category,p=send_branch)
 @app.route('/user_db', methods=['GET'])
 def user_db():
+    # [no longer used to deliver  front-end]Get the user database name from the session(Discouraged)
     return jsonify({'user_db': session['db_name']})
 @app.route('/home')
 def main():
+    # Main Dashboard (with user loaded)
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
@@ -73,6 +79,7 @@ def main():
     return render_template('home.html',p=send_inventory,n=send_category,l=send_branch,username=username,t=send_remak,date=datetime_1) 
 @app.route('/sales')
 def sales():
+    # load the sales page
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
@@ -80,6 +87,7 @@ def sales():
     return render_template('sales.html',x=send_sales)
 @app.route('/pie')
 def pie():
+    # load the pie page and data to load in charts
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
@@ -95,12 +103,14 @@ def pie():
     return render_template('pie.html',x=send_category_percentage,total_weekly=send_total_weeekly_items,days=send_days,best=send_best_selling,out_going=send_out_going,pay=send_payment)
 @app.route('/noaccess')
 def noaccess():
+    # no longer need to pass the session data to the front end (Discouraged)
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
     return render_template('noaccess.html')
 @app.route('/inventory')
 def inventory():
+    # load the inventory page
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
@@ -108,6 +118,7 @@ def inventory():
     return render_template('inventory.html',x=send_inventory)
 @app.route('/out_going')
 def out_going():
+    # load the out_going page
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
@@ -115,11 +126,13 @@ def out_going():
     return render_template('out_going.html',x=send_out_going)
 @app.route('/')
 def index():
+    # Main page
     if 'user_name' in session:
         return redirect('/home')
     return render_template('index.html')
 @app.route('/activate/<user_name>', methods=['GET'])
 def activate(user_name):
+    # Get the username from the URL and activate user account
     user_name=request.view_args['user_name']
     client=MongoClient(host='localhost',port= 27017)
     db = client[Mongo_db]
@@ -128,13 +141,16 @@ def activate(user_name):
     return render_template('activate.html',p=user_name)
 @app.route('/logout')
 def login_init():
+    # remove the username from the session if it is there
     session.pop('user_name', None)
     return redirect('/')
 @app.route('/session', methods=['GET'])
 def session_data():
+    # no longer need to pass the session data to the front end
     return jsonify({'user': session.get('user_name')})
 @app.route('/profile')
 def profile():
+    # load the profile page
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
