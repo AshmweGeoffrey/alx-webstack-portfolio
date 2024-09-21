@@ -1,16 +1,16 @@
-from flask import Flask, render_template,redirect, request, jsonify, session,flash
+from flask import Flask, render_template,redirect, request, jsonify, session,flash,g
 from requests import get
 from pymongo import MongoClient
 from bcrypt import checkpw
 from datetime import datetime
-from bson.json_util import dumps
+import redis
+import secrets
 Mongo_db='Ax'
-current_db=None
+current_db='tempo'
 app = Flask(__name__)
 app.config['SECRET_KEY'] ='a881f5413500986cbd88e99456623f51e6ccde187d2e399a3f4fdcfa72008b74'
 app.static_folder = 'static'
 x=None
-current_db=None
 local_api_url = 'http://localhost:5000/api/v1'
 @app.errorhandler(404)
 def not_found(error):
@@ -28,7 +28,9 @@ def login():
         if checkpw(password.encode('utf-8'),collected_data['password'].encode('utf-8')):
             for key,data in collected_data.items():
                 session[key]=data
-            current_db=collected_data['db_name']
+            db_collected=collected_data['db_name']
+            client = redis.Redis(host='localhost', port=6379, db=0)
+            client.set(current_db,db_collected)
             flash('Welcome {}'.format(session['user_name']),category='success')
             return redirect('/home')
         # Return an error message for invalid credentials
@@ -36,17 +38,28 @@ def login():
             return render_template('login.html', error='Invalid username or password')
     else:
         return render_template('login.html')
-@app.route('/register', methods=['GET','POST'])
+@app.route('/register', methods=['GET'])
 def register():
-    if request.method == 'POST':
-        pass
     return render_template('register.html')
+@app.route('/set_up', methods=['GET'])
+def set_up():
+    if 'user_name' not in session:
+        # User is not logged in, redirect to the login page
+        return redirect('/login')
+    elif session['access_control'] != 'LEVEL-1':
+        flash('You do not have access to this page',category='error')
+        return redirect('/home')
+    send_category=get('{}/category'.format(local_api_url)).json()
+    send_branch=get('{}/branch'.format(local_api_url)).json()
+    return render_template('set-up.html',o=send_category,p=send_branch)
+@app.route('/user_db', methods=['GET'])
+def user_db():
+    return jsonify({'user_db': session['db_name']})
 @app.route('/home')
 def main():
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
-    print(session)
     send_inventory=get('{}/inventory'.format(local_api_url)).json()
     datetime_1=str(datetime.now())
     send_category=get('{}/category'.format(local_api_url)).json()
@@ -66,7 +79,7 @@ def pie():
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
-    if session['access_control'] != 'LEVEL-1-1':
+    if session['access_control'] != 'LEVEL-1':
         flash('You do not have access to this page',category='error')
         return redirect('/home') 
     send_days=dict(get('{}/pie/days'.format(local_api_url)).json())
@@ -101,10 +114,18 @@ def index():
     if 'user_name' in session:
         return redirect('/home')
     return render_template('index.html')
+@app.route('/activate/<user_name>', methods=['GET'])
+def activate():
+    user_name=request.view_args['user_name']
+    client=MongoClient(host='localhost',port= 27017)
+    db = client[Mongo_db]
+    collection = db['user']
+    collection.find_one_and_update({'user_name': user_name},{'$set': {'status': 'active'}})
+    return render_template('activate.html',p=user_name)
 @app.route('/logout')
 def login_init():
     session.pop('user_name', None)
-    return redirect('/login')
+    return redirect('/')
 @app.route('/session', methods=['GET'])
 def session_data():
     return jsonify({'user': session.get('user_name')})
@@ -120,7 +141,8 @@ def profile():
         "company":session['company'],
         "address":session['address'],
         "role":session['access_control'],
-        "date":session['created_at']
+        "date":session['created_at'],
+        "status":session['status']
     }
     return render_template('profile.html',user=user_data)
 if __name__ == '__main__':

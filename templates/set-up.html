@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/in-stock.png') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home-style.css') }}">
+        <title>
+            Ax Stock
+        </title>
+    </head>
+    <body>
+        <header><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt=""> AX</header>
+        <div id="sidebar">
+            <ul>
+                <li><a href="/"><img src="{{ url_for('static', filename='images/in-stock.png') }}" alt="" id="in-stock"></a></li>
+                <li><a href="logout"><img src="{{ url_for('static', filename='images/logout.png') }}" alt="" id="logout" ></a></li>
+               <!-- Add more links as needed -->
+            </ul>
+        </div>
+        </div>
+        <div id="content">
+            <h1>Set Up Bussiness Profile</h1>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        <div id="container">
+            <div id="table" >
+                <table>
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Branch</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in o %}
+            <tr>
+                <td>{{ category[1] }}</td>
+                <td>
+                    {% if loop.index0 < p|length %}
+                        {{ p[loop.index0][1] }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        {% if o|length < p|length %}
+            {% for branch in p[o|length:] %}
+                <tr>
+                    <td></td>
+                    <td>{{ branch[1] }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+            </div>
+        <div id ="category-1">
+            <form method="POST" action="http://localhost:5000/api/v1/post/category" >
+                <label for="category">Category</label>
+                <input type="text" id="category" name="category">
+                <button type="submit" name="submit" value="submit">Add Category</button>    
+            </form>
+        </div>
+        <div id ="branch-1">
+            <form method="POST" action="http://localhost:5000/api/v1/post/branch">
+                <label for="branch">Branch</label>
+                <input type="text" id="branch" name="branch">
+                <button type="submit" name="submit" value="submit">Add Branch</button>
+            </form>
+        </div>
+        </div>
+    </body>
+</html>
