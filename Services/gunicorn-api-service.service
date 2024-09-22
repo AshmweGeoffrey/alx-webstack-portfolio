@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance service Flask api with New Relic
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/root/alx-deployment
+Environment="PATH=/root/alx-env/bin"
+ExecStart=/root/alx-env/bin/gunicorn --workers 3 --bind 0.0.0.0:5000 -m 007 --access-logfile /root/alx-deployment/logs/api/gunicorn-access-api.log --error-logfile /root/alx-deployment/logs/api/gunicorn-error-api.log  app:app
+
+[Install]
+WantedBy=multi-user.target
