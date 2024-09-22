@@ -6,3 +6,4 @@ models/__pycache__/
 models/engine/__pycache__/
 api/v1/blueprints/__pycache__/
 templates/noaccess.html
+templates/main.html
