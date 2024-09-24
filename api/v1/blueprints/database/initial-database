@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.37, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.39, for Linux (x86_64)
 --
--- Host: localhost    Database: testcompany_3_db
+-- Host: localhost    Database: test_45_db
 -- ------------------------------------------------------
--- Server version	8.0.37-0ubuntu0.23.10.2
+-- Server version	8.0.39-0ubuntu0.24.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -112,8 +112,7 @@ CREATE TABLE `outgoing_stock` (
   KEY `fk_outgoing_stock_branch_name` (`branch_name`),
   CONSTRAINT `fk_outgoing_stock_branch_name` FOREIGN KEY (`branch_name`) REFERENCES `branch` (`branch_name`),
   CONSTRAINT `outgoing_stock_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `inventory` (`name`),
-  CONSTRAINT `outgoing_stock_ibfk_2` FOREIGN KEY (`category_name`) REFERENCES `category` (`name`),
-  CONSTRAINT `outgoing_stock_ibfk_3` FOREIGN KEY (`user_name`) REFERENCES `user` (`name`)
+  CONSTRAINT `outgoing_stock_ibfk_2` FOREIGN KEY (`category_name`) REFERENCES `category` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -191,6 +190,7 @@ CREATE TABLE `payment_method` (
 
 LOCK TABLES `payment_method` WRITE;
 /*!40000 ALTER TABLE `payment_method` DISABLE KEYS */;
+INSERT INTO `payment_method` VALUES ('PM003','Cash',0),('PM001','Mobile Money',0),('PM002','Pos',0);
 /*!40000 ALTER TABLE `payment_method` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -241,7 +241,6 @@ CREATE TABLE `sale_weekly` (
   KEY `fk_sale_weekly_payment_method` (`payment_method`),
   CONSTRAINT `fk_sale_weekly_category` FOREIGN KEY (`category`) REFERENCES `inventory` (`category_name`),
   CONSTRAINT `fk_sale_weekly_payment_method` FOREIGN KEY (`payment_method`) REFERENCES `payment_method` (`name`),
-  CONSTRAINT `sale_weekly_ibfk_1` FOREIGN KEY (`user_name`) REFERENCES `user` (`name`),
   CONSTRAINT `sale_weekly_ibfk_2` FOREIGN KEY (`item_name`) REFERENCES `inventory` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -395,4 +394,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-18 17:32:38
+-- Dump completed on 2024-09-24 21:50:41
