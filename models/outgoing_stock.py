@@ -6,7 +6,7 @@ class outgoing_stock(BaseModel,Base):
     __tablename__='outgoing_stock'
     id=Column(String(50), primary_key=True,nullable=False)
     item_name=Column(String(64),ForeignKey('inventory.name'),unique=True,nullable=False) 
-    user_name=Column(String(32),ForeignKey('user.name'),unique=True)
+    user_name=Column(String(32),unique=True)
     branch_name=Column(String(16),ForeignKey('branch.branch_name'),nullable=False,unique=True)
     quantity=Column(Integer,nullable=False)
     def __init__(self,*args,**kwargs):

@@ -11,7 +11,7 @@ class sale_weekly(BaseModel,Base):
     item_name = Column(String(64),ForeignKey('inventory.name'),unique=True)
     quantity = Column(Integer,nullable=False,default=1)
     price = Column(Integer,nullable=False,default=0)
-    user_name = Column(String(32),ForeignKey('user.name'),unique=True)
+    user_name = Column(String(32),unique=True)
     payment_method = Column(String(50),nullable=False)
     time_stamp = Column(DateTime,unique=True)
     def __init__(self,*args,**kwargs):
