@@ -1,5 +1,3 @@
-<h1> Not yet </h1># Multi-Tenant Database Stock Management System
-
 This system is a Flask-based web application for managing stocks across multiple tenants. It uses a combination of MongoDB for user management and individual databases for each user's stock-related operations.
 
 ## Features
