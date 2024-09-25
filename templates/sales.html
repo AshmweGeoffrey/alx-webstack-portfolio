@@ -34,6 +34,15 @@
                 <p>Current Week  Sales</p>
             </div>
             <div id="table" >
+                <div id="Search">
+                <form action="/sales" method="post">
+                    <label for="from">From:</label>
+                    <input type="date" id="from" name="From">
+                    <label for="to">to:</label>
+                    <input type="date" id="to" name="to">
+                    <input type="submit" value="Submit">
+                </form>
+                </div>
                 <table>
                     <thead>
                         <tr>

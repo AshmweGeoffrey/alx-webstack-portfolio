@@ -79,13 +79,18 @@ def main():
     send_remak=get('{}/remarks'.format(local_api_url)).json()
     username=session['user_name']
     return render_template('home.html',p=send_inventory,n=send_category,l=send_branch,username=username,t=send_remak,date=datetime_1) 
-@app.route('/sales')
+@app.route('/sales', methods=['GET','POST'])
 def sales():
     # load the sales page
     if 'user_name' not in session:
         # User is not logged in, redirect to the login page
         return redirect('/login')
-    send_sales=get('{}/sales'.format(local_api_url)).json()
+    from_date=request.form.get('from')
+    to_date=request.form.get('to')
+    if from_date and to_date:
+        send_sales=get('{}/sales?from={}&to={}'.format(local_api_url,from_date,to_date)).json()
+    else:
+        send_sales=get('{}/sales'.format(local_api_url)).json()
     return render_template('sales.html',x=send_sales)
 @app.route('/pie')
 def pie():
