@@ -105,13 +105,6 @@ Gunicorn service files for the API and main application are located in the `Serv
 
 Logs are stored in the `logs/` directory, separated into API logs, application logs, and Nginx logs.
 
-## Contributing
-
-Please read the contributing guidelines (not provided in the current structure) before submitting pull requests.
-
-## License
-
-[Insert your license information here]
 
 ## Support
 
